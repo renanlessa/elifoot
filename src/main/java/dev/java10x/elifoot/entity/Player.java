@@ -3,6 +3,7 @@ package dev.java10x.elifoot.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor

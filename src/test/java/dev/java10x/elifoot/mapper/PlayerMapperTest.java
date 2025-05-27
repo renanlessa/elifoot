@@ -20,12 +20,13 @@ class PlayerMapperTest {
     @DisplayName("Should convert CreatePlayerRequest to Player")
     void toEntity() {
         // Given
-        CreatePlayerRequest request = new CreatePlayerRequest();
-        request.setName("Lionel Messi");
-        request.setPosition(Position.FORWARD);
-        request.setShirtNumber(10);
-        request.setClubId(1L);
-        request.setUrlImg("https://www.superstarsoccer.com.br/players/messi.jpg");
+        CreatePlayerRequest request = CreatePlayerRequest.builder()
+                .name("Lionel Messi")
+                .position(Position.FORWARD)
+                .shirtNumber(10)
+                .clubId(1L)
+                .urlImg("https://www.superstarsoccer.com.br/players/messi.jpg")
+                .build();
 
         // When
         Player player = mapper.toEntity(request);
