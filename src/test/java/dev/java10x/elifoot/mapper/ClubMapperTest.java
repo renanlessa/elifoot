@@ -11,8 +11,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ClubMapperTest {
 
@@ -37,6 +36,16 @@ class ClubMapperTest {
         assertEquals(club.getName(), response.getName());
         assertEquals(club.getFounded(), response.getFounded());
         assertEquals(club.getUrlImg(), response.getUrlImg());
+    }
+
+    @Test
+    @DisplayName("Should return null when Club entity is null")
+    void toResponseNull() {
+        // Given + When
+        ClubResponse response = mapper.toResponse(null);
+
+        // Then
+        assertNull(response);
     }
 
     @Test
@@ -74,6 +83,16 @@ class ClubMapperTest {
     }
 
     @Test
+    @DisplayName("Should return null when Club entity is null for ClubDetailResponse")
+    void toDetailResponseNull() {
+        // Given + When
+        ClubDetailResponse response = mapper.toDetailResponse(null);
+
+        // Then
+        assertNull(response);
+    }
+
+    @Test
     @DisplayName("Should map CreateClubRequest to Club entity")
     void toEntity() {
         // Given
@@ -92,5 +111,15 @@ class ClubMapperTest {
         assertEquals(request.getFounded(), club.getFounded());
         assertEquals(request.getStadiumId(), club.getStadium().getId());
         assertEquals(request.getUrlImg(), club.getUrlImg());
+    }
+
+    @Test
+    @DisplayName("Should return null when CreateClubRequest is null")
+    void toEntityNul() {
+        // Given + When
+        Club club = mapper.toEntity(null);
+
+        // Then
+        assertNull(club);
     }
 }

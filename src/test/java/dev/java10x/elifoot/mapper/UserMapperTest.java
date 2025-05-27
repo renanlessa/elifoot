@@ -10,6 +10,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -42,6 +43,16 @@ class UserMapperTest {
     }
 
     @Test
+    @DisplayName("Should return null when CreateUserRequest is null")
+    void toEntityNull() {
+        // Given + When
+        User user = mapper.toEntity(null);
+
+        // Then
+        assertNull(user);
+    }
+
+    @Test
     @DisplayName("Should map User entity to UserResponse")
     void toResponse() {
         // Given
@@ -63,5 +74,15 @@ class UserMapperTest {
         assertEquals(user.getScopes().size(), response.getScopes().size());
         assertEquals(user.getScopes().get(0).getName(), response.getScopes().get(0));
         assertEquals(user.getScopes().get(1).getName(), response.getScopes().get(1));
+    }
+
+    @Test
+    @DisplayName("Should return null when User entity is null")
+    void toResponseNull() {
+        // Given + When
+        UserResponse response = mapper.toResponse(null);
+
+        // Then
+        assertNull(response);
     }
 }

@@ -7,8 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class StadiumMapperTest {
 
@@ -33,7 +32,16 @@ class StadiumMapperTest {
         assertEquals(request.getName(), stadium.getName());
         assertEquals(request.getCapacity(), stadium.getCapacity());
         assertEquals(request.getUrlImg(), stadium.getUrlImg());
+    }
 
+    @Test
+    @DisplayName("Should return null when CreateStadiumRequest is null")
+    void toEntityNull() {
+        // Given + When
+        Stadium stadium = mapper.toEntity(null);
+
+        // Then
+        assertNull(stadium);
     }
 
     @Test
@@ -57,5 +65,15 @@ class StadiumMapperTest {
         assertEquals(stadium.getName(), response.getName());
         assertEquals(stadium.getCapacity(), response.getCapacity());
         assertEquals(stadium.getUrlImg(), response.getUrlImg());
+    }
+
+    @Test
+    @DisplayName("Should return null when Stadium is null")
+    void toResponseNull() {
+        // Given + When
+        StadiumResponse response = mapper.toResponse(null);
+
+        // Then
+        assertNull(response);
     }
 }

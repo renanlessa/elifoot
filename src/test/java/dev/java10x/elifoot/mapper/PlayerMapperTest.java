@@ -10,8 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerMapperTest {
 
@@ -41,6 +40,16 @@ class PlayerMapperTest {
     }
 
     @Test
+    @DisplayName("Should return null when CreatePlayerRequest is null")
+    void toEntityNull() {
+        // Given + When
+        Player player = mapper.toEntity(null);
+
+        // Then
+        assertNull(player);
+    }
+
+    @Test
     @DisplayName("Should convert Player to PlayerResponse")
     void toResponse() {
         // Given
@@ -61,6 +70,16 @@ class PlayerMapperTest {
         assertEquals(player.getPosition().getLabel(), response.getPosition());
         assertEquals(player.getShirtNumber(), response.getShirtNumber());
         assertEquals(player.getUrlImg(), response.getUrlImg());
+    }
+
+    @Test
+    @DisplayName("Should return null when Player is null")
+    void toResponseNull() {
+        // Given + When
+        PlayerResponse response = mapper.toResponse(null);
+
+        // Then
+        assertNull(response);
     }
 
     @Test
@@ -87,5 +106,15 @@ class PlayerMapperTest {
         assertEquals(player.getUrlImg(), response.getUrlImg());
         assertEquals(player.getClub().getId(), response.getClub().getId());
         assertEquals(player.getClub().getName(), response.getClub().getName());
+    }
+
+    @Test
+    @DisplayName("Should return null when Player is null for detail response")
+    void toDetailResponseNull() {
+        // Given + When
+        PlayerDetailResponse response = mapper.toDetailResponse(null);
+
+        // Then
+        assertNull(response);
     }
 }
