@@ -3,6 +3,7 @@ package dev.java10x.elifoot.service;
 import dev.java10x.elifoot.controller.request.CreateUserRequest;
 import dev.java10x.elifoot.exception.ResourceAlreadyExistsException;
 import dev.java10x.elifoot.repository.UserRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,6 +22,7 @@ class CreateUserServiceTest {
     UserRepository userRepository;
 
     @Test
+    @DisplayName("Should throw exception when email already exists")
     void shoulThrowExceptionWhenEmailAlreadyExists() {
         // Given
         CreateUserRequest request = new CreateUserRequest();

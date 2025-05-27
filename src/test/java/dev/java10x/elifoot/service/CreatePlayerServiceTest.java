@@ -6,6 +6,7 @@ import dev.java10x.elifoot.entity.Player;
 import dev.java10x.elifoot.entity.Position;
 import dev.java10x.elifoot.mapper.PlayerMapper;
 import dev.java10x.elifoot.repository.PlayerRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
@@ -29,7 +30,8 @@ class CreatePlayerServiceTest {
     ArgumentCaptor<Player> playerCaptor;
 
     @Test
-    void execute() {
+    @DisplayName("Should create a player successfully")
+    void shouldCreatePlayer() {
         // Arrange
         CreatePlayerRequest request = CreatePlayerRequest.builder()
                 .name("Test Player")
