@@ -109,6 +109,30 @@ class PlayerMapperTest {
     }
 
     @Test
+    @DisplayName("Should convert Player to PlayerDetailResponse without club information")
+    void toDetailResponseWithoutClub() {
+        // Given
+        Player player = new Player();
+        player.setId(1L);
+        player.setName("Lionel Messi");
+        player.setPosition(Position.FORWARD);
+        player.setShirtNumber(10);
+        player.setUrlImg("https://www.superstarsoccer.com.br/players/messi.jpg");
+
+        // When
+        PlayerDetailResponse response = mapper.toDetailResponse(player);
+
+        // Then
+        assertNotNull(response);
+        assertEquals(player.getId(), response.getId());
+        assertEquals(player.getName(), response.getName());
+        assertEquals(player.getPosition().getLabel(), response.getPosition());
+        assertEquals(player.getShirtNumber(), response.getShirtNumber());
+        assertEquals(player.getUrlImg(), response.getUrlImg());
+        assertNull(response.getClub());
+    }
+
+    @Test
     @DisplayName("Should return null when Player is null for detail response")
     void toDetailResponseNull() {
         // Given + When

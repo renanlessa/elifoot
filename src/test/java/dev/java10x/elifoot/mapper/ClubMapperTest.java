@@ -79,7 +79,28 @@ class ClubMapperTest {
         assertEquals(club.getStadium().getCity(), response.getStadium().getCity());
         assertEquals(club.getStadium().getCapacity(), response.getStadium().getCapacity());
         assertEquals(club.getStadium().getUrlImg(), response.getStadium().getUrlImg());
+    }
 
+    @Test
+    @DisplayName("Should map Club entity to ClubDetailResponse Without Stadium")
+    void toDetailResponseWithoutStadium() {
+        // Given
+        Club club = new Club();
+        club.setId(1L);
+        club.setName("São Paulo FC");
+        club.setFounded(LocalDate.of(1935, 1, 1));
+        club.setUrlImg("https://www.superstarsoccer.com.br/clubs/spfc.jpg");
+
+        // When
+        ClubDetailResponse response = mapper.toDetailResponse(club);
+
+        // Then
+        assertNotNull(response);
+        assertEquals(club.getId(), response.getId());
+        assertEquals(club.getName(), response.getName());
+        assertEquals(club.getFounded(), response.getFounded());
+        assertEquals(club.getUrlImg(), response.getUrlImg());
+        assertNull(response.getStadium());
     }
 
     @Test
@@ -111,6 +132,8 @@ class ClubMapperTest {
         assertEquals(request.getFounded(), club.getFounded());
         assertEquals(request.getStadiumId(), club.getStadium().getId());
         assertEquals(request.getUrlImg(), club.getUrlImg());
+        assertNotNull(club.getStadium());
+        assertEquals(request.getStadiumId(), club.getStadium().getId());
     }
 
     @Test
