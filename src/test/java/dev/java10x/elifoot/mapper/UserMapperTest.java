@@ -22,11 +22,12 @@ class UserMapperTest {
     @DisplayName("Should map CreateUserRequest to User entity")
     void toEntity() {
         // Given
-        CreateUserRequest request = new CreateUserRequest();
-        request.setName("new user");
-        request.setEmail("newuser@java10x.com");
-        request.setPassword("password");
-        request.setScopes(List.of(34L, 12L));
+        CreateUserRequest request = CreateUserRequest.builder()
+                .name("new user")
+                .email("newuser@java10x.com")
+                .password("password")
+                .scopes(List.of(34L, 12L))
+                .build();
 
         // When
         User user = mapper.toEntity(request);

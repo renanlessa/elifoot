@@ -36,7 +36,7 @@ public class CreateUserService {
         User newUser = userMapper.toEntity(request);
         newUser.setPassword(passwordEncoder.encode(request.getPassword()));
         newUser.setScopes(scopes);
-        User user = userRepository.save(userMapper.toEntity(request));
+        User user = userRepository.save(newUser);
         return userMapper.toResponse(user);
     }
 }
