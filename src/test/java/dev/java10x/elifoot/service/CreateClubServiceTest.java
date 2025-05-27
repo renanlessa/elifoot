@@ -1,22 +1,17 @@
 package dev.java10x.elifoot.service;
 
 import dev.java10x.elifoot.controller.request.CreateClubRequest;
-import dev.java10x.elifoot.controller.response.ClubResponse;
 import dev.java10x.elifoot.entity.Club;
 import dev.java10x.elifoot.entity.Stadium;
 import dev.java10x.elifoot.mapper.ClubMapper;
 import dev.java10x.elifoot.repository.ClubRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,44 +26,80 @@ class CreateClubServiceTest {
     FindStadiumService findStadiumService;
     @Mock
     ClubMapper clubMapper;
+    @Captor
+    ArgumentCaptor<Club> clubCaptor;
 
-    private Stadium stadium;
-    private Club club;
+    @Test
+    @DisplayName("Should save new club with stadium successfully")
+    void shouldSaveNewClubWithStadium() {
+        // Given
+        Stadium stadium = Stadium.builder()
+                .id(2L)
+                .name("New Stadium")
+                .city("New City")
+                .capacity(2900)
+                .urlImg("url_imagem")
+                .build();
 
-    @BeforeEach
-    void setUp() {
-        stadium = new Stadium(1L, "Estádio Central", "Cidade A", 50000, "url_imagem");
-        club = new Club(1L, "Clube A", LocalDate.of(1980, 10, 10), "url_imagem", stadium, List.of());
+        Club newClub = Club.builder()
+                .id(1L)
+                .name("New Club")
+                .founded(LocalDate.of(1980, 10, 10))
+                .urlImg("url_imagem")
+                .stadium(Stadium.builder().id(2L).build())
+                .build();
+
+        Mockito.when(clubMapper.toEntity(Mockito.any())).thenReturn(newClub);
+        Mockito.when(findStadiumService.findById(Mockito.anyLong())).thenReturn(stadium);
+
+        // When
+        createClubService.execute(Mockito.any(CreateClubRequest.class));
+
+        // Then
+        Mockito.verify(clubMapper).toEntity(Mockito.any());
+        Mockito.verify(findStadiumService).findById(Mockito.anyLong());
+        Mockito.verify(clubMapper).toResponse(Mockito.any());
+        Mockito.verify(clubRepository).save(clubCaptor.capture());
+        Club club = clubCaptor.getValue();
+        assertNotNull(club);
+        assertTrue(club.isActive());
+        assertNotNull(club.getCreatedAt());
+        assertNotNull(club.getStadium());
+        assertEquals(newClub.getName(), club.getName());
+        assertEquals(newClub.getFounded(), club.getFounded());
+        assertEquals(newClub.getUrlImg(), club.getUrlImg());
+        assertEquals(newClub.getStadium(), club.getStadium());
     }
 
     @Test
-    @DisplayName("Should save new club with success")
-    void shouldSaveNewClub() {
+    @DisplayName("Should save new club without stadium successfully")
+    void shouldSaveNewClubWithoutStadium() {
         // Given
-        CreateClubRequest request = new CreateClubRequest();
-        request.setName("Clube A");
-        request.setFounded(LocalDate.of(1980, 10, 10));
-        request.setUrlImg("url_imagem");
-        request.setStadiumId(1L);
+        Club newClub = Club.builder()
+                .id(1L)
+                .name("New Club")
+                .founded(LocalDate.of(1980, 10, 10))
+                .urlImg("url_imagem")
+                .build();
 
-        ClubResponse clubResponse = new ClubResponse();
-        clubResponse.setId(1L);
-        clubResponse.setName("Clube A");
-        clubResponse.setFounded(LocalDate.of(1980, 10, 10));
-        clubResponse.setUrlImg("url_imagem");
+        Mockito.when(clubMapper.toEntity(Mockito.any())).thenReturn(newClub);
 
-        Mockito.when(clubMapper.toEntity(request)).thenReturn(club);
-        Mockito.when(findStadiumService.findById(1L)).thenReturn(stadium);
-        Mockito.when(clubRepository.save(club)).thenReturn(club);
-        Mockito.when(clubMapper.toResponse(club)).thenReturn(clubResponse);
         // When
-        ClubResponse response = createClubService.execute(request);
+        createClubService.execute(Mockito.any(CreateClubRequest.class));
 
         // Then
-        Mockito.verify(clubMapper).toEntity(request);
-        Mockito.verify(findStadiumService).findById(1L);
-        Mockito.verify(clubRepository).save(club);
-        Mockito.verify(clubMapper).toResponse(club);
-        assertNotNull(response);
+        Mockito.verify(clubMapper).toEntity(Mockito.any());
+        Mockito.verify(findStadiumService, Mockito.never()).findById(Mockito.anyLong());
+        Mockito.verify(clubMapper).toResponse(Mockito.any());
+        Mockito.verify(clubRepository).save(clubCaptor.capture());
+        Club club = clubCaptor.getValue();
+        assertNotNull(club);
+        assertTrue(club.isActive());
+        assertNotNull(club.getCreatedAt());
+        assertNull(club.getStadium());
+        assertEquals(newClub.getName(), club.getName());
+        assertEquals(newClub.getFounded(), club.getFounded());
+        assertEquals(newClub.getUrlImg(), club.getUrlImg());
+        assertEquals(newClub.getStadium(), club.getStadium());
     }
 }

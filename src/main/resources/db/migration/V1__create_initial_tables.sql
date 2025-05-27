@@ -15,6 +15,8 @@ CREATE TABLE club (
     name VARCHAR(255) NOT NULL,
     founded DATE NOT NULL,
     url_img VARCHAR(255),
+    created_at TIMESTAMP,
+    active BOOLEAN,
     stadium_id BIGINT UNIQUE,
     CONSTRAINT fk_club_stadium FOREIGN KEY (stadium_id) REFERENCES stadium(id)
 );

@@ -8,6 +8,7 @@ import dev.java10x.elifoot.repository.ClubRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Service
@@ -24,6 +25,10 @@ public class CreateClubService {
         if (Objects.nonNull(newClub.getStadium())) {
             newClub.setStadium(findStadiumService.findById(newClub.getStadium().getId()));
         }
+
+        newClub.setCreatedAt(LocalDateTime.now());
+        newClub.setActive(true);
+
         Club club = clubRepository.save(newClub);
         return clubMapper.toResponse(club);
     }
